@@ -37,7 +37,7 @@
             border: 1px solid #86efac;
         }
         .time-box {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
             color: #15803d;
         }
@@ -56,15 +56,18 @@
         }
         .message { margin-top: 10px; font-size: 1.2rem; }
         
-        /* নতুন যোগ করা স্টাইল */
+        /* লোগো স্টাইল */
         .association-logo {
-            width: 120px; /* লোগোর সাইজ */
+            width: 120px;
             height: auto;
             margin-top: 25px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         .association-name {
             font-size: 1.3rem;
-            color: #166534; /* কাউন্টডাউনের রঙের সাথে মিল রেখে */
+            color: #166534;
             font-weight: bold;
             margin-top: 10px;
         }
@@ -77,7 +80,7 @@
 <div class="container">
     <h1>🌙 রমজান ক্যালেন্ডার ২০২৬</h1>
     <h2>পটুয়াখালী জেলা</h2>
-    <h3 id="currentDate">আজকের তারিখ লোড হচ্ছে...</h3>
+    <h3 id="currentDate">তারিখ যাচাই করা হচ্ছে...</h3>
 
     <div id="scheduleBox" style="display:none;">
         <div class="card">
@@ -91,15 +94,15 @@
     </div>
 
     <div class="countdown" id="countdownBox">
-        <div class="message" id="statusMsg">লোড হচ্ছে...</div>
-        <div class="countdown-timer" id="timer">00:00:00</div>
+        <div class="message" id="statusMsg">অপেক্ষা করুন...</div>
+        <div class="countdown-timer" id="timer">০০:০০:০০</div>
     </div>
 
-    <img src="image_1.png" alt="মির্জাগঞ্জ উপজেলা স্টুডেন্টস' অ্যাসোসিয়েশন লোগো" class="association-logo">
+    <img src="logo.jpg" alt="লোগো" class="association-logo" onerror="this.style.display='none'">
     <div class="association-name">মির্জাগঞ্জ উপজেলা স্টুডেন্টস' অ্যাসোসিয়েশন, বরিশাল</div>
 
     <div id="noDataMsg" style="color: red; display: none; margin-top: 20px;">
-        আজকের জন্য কোনো সময়সূচী পাওয়া যায়নি। (সম্ভবত রমজান মাস শেষ অথবা এখনো শুরু হয়নি)।
+        আজকের জন্য কোনো সময়সূচী পাওয়া যায়নি।
     </div>
     
     <footer>
@@ -108,8 +111,6 @@
 </div>
 
 <script>
-    // পটুয়াখালী জেলার ডাটা (২০২৬)
-    // ফরম্যাট: [তারিখ (YYYY-MM-DD), সাহরী (AM), ইফতার (PM)]
     const schedule = [
         { date: "2026-02-19", sahri: "05:11", iftar: "05:59" },
         { date: "2026-02-20", sahri: "05:10", iftar: "06:00" },
@@ -148,30 +149,54 @@
         return str.toString().replace(/[0-9]/g, (match) => numbers[match]);
     }
 
-    function formatTime12(time24) {
-        let [h, m] = time24.split(':');
-        let suffix = h >= 12 ? ' PM' : ' AM';
-        h = h % 12 || 12;
-        return toBengaliNumerals(${h}:${m}) + ""; 
+    function formatTimeDisplay(timeStr) {
+        let [h, m] = timeStr.split(':');
+        h = parseInt(h, 10); 
+        return toBengaliNumerals(${h}:${m});
     }
 
     function updateDashboard() {
         const now = new Date();
         
+        // তারিখ ডিসপ্লে আপডেট
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        let dateText = new Intl.DateTimeFormat('bn-BD', options).format(now);
+        document.getElementById('currentDate').innerText = toBengaliNumerals(dateText);
+
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
         const todayStr = ${year}-${month}-${day};
-        
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('currentDate').innerText = new Intl.DateTimeFormat('bn-BD', options).format(now);
 
+        // ১ম রমজান কবে শুরু হবে তা বের করা
+        const firstRamadanDate = schedule[0].date;
+        const firstRamadanTime = new Date(${firstRamadanDate}T${schedule[0].sahri}:00);
+
+        // চেক করা: আজ কি রমজানের আগের তারিখ?
+        if (now < firstRamadanTime) {
+            // যদি আজ রমজান শুরু হওয়ার আগের দিন হয় (যেমন ১৮ তারিখ)
+            document.getElementById('scheduleBox').style.display = 'block';
+            document.getElementById('sahriTime').innerText = formatTimeDisplay(schedule[0].sahri);
+            document.getElementById('iftarTime').innerText = formatTimeDisplay(schedule[0].iftar);
+            
+            // মেসেজ আপডেট
+            let diff = firstRamadanTime - now;
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('statusMsg').innerText = "১ম সাহরীর শেষ সময়ের বাকি";
+            document.getElementById('timer').innerText = toBengaliNumerals(${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')});
+            return; // এখান থেকেই ফাংশন শেষ, যাতে নিচের কোড আর না চলে
+        }
+
+        // আজকের তারিখের ডাটা খোঁজা
         const todayData = schedule.find(item => item.date === todayStr);
 
         if (todayData) {
             document.getElementById('scheduleBox').style.display = 'block';
-            document.getElementById('sahriTime').innerText = toBengaliNumerals(todayData.sahri);
-            document.getElementById('iftarTime').innerText = toBengaliNumerals(todayData.iftar);
+            document.getElementById('sahriTime').innerText = formatTimeDisplay(todayData.sahri);
+            document.getElementById('iftarTime').innerText = formatTimeDisplay(todayData.iftar);
             
             const sahriTime = new Date(${todayStr}T${todayData.sahri}:00);
             let [iftarH, iftarM] = todayData.iftar.split(':');
@@ -205,9 +230,10 @@
             }
 
         } else {
-             document.getElementById('scheduleBox').style.display = 'none';
-             document.getElementById('countdownBox').style.display = 'none';
-             document.getElementById('noDataMsg').style.display = 'block';
+            // যদি রমজান শেষ হয়ে যায়
+            document.getElementById('scheduleBox').style.display = 'none';
+            document.getElementById('statusMsg').innerText = "পবিত্র মাহে রমজান সমাপ্ত।";
+            document.getElementById('timer').innerText = "";
         }
     }
 
