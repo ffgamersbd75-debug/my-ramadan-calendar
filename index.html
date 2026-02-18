@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সাহরী ও ইফতারের সময়সূচী - পটুয়াখালী ২০২৬</title>
+    <title>সাহরী ও ইফতার - পটুয়াখালী ২০২৬</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -22,7 +22,7 @@
         }
         .container {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             max-width: 450px;
@@ -40,16 +40,16 @@
             color: #166534;
             font-weight: 600;
         }
-        h1 { color: #16a34a; margin: 5px 0 20px 0; font-size: 1.8rem; font-weight: 700; }
+        h1 { color: #16a34a; margin: 0 0 20px 0; font-size: 1.8rem; font-weight: 700; }
         .time-row {
             display: flex;
             justify-content: space-between;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 20px;
         }
         .time-card {
             background: #f0fdf4;
-            padding: 15px 10px;
+            padding: 15px 5px;
             border-radius: 12px;
             border: 1px solid #86efac;
             width: 48%;
@@ -57,47 +57,47 @@
             flex-direction: column;
             align-items: center;
         }
-        .time-label { font-size: 1.1rem; color: #555; margin-bottom: 5px; }
-        .time-value { font-size: 2rem; font-weight: 700; color: #15803d; }
+        .time-label { font-size: 1rem; color: #555; margin-bottom: 5px; }
+        .time-value { font-size: 1.8rem; font-weight: 700; color: #15803d; }
         .countdown {
             background: #166534;
             color: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
         }
-        .message { font-size: 1.1rem; margin-bottom: 8px; opacity: 0.9; }
-        .countdown-timer { font-size: 2.5rem; font-weight: 700; font-family: monospace; }
+        .message { font-size: 1rem; margin-bottom: 5px; opacity: 0.9; }
+        .countdown-timer { font-size: 2.2rem; font-weight: 700; font-family: monospace; }
         .logo-container {
-            margin-top: 25px;
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .association-logo {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #16a34a;
             margin-bottom: 10px;
         }
         .association-name {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #166534;
             font-weight: 700;
-            line-height: 1.5;
-            word-spacing: 2px;
+            line-height: 1.4;
+            word-spacing: 1px;
         }
-        footer { margin-top: 25px; font-size: 0.9rem; color: #888; }
+        footer { margin-top: 20px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header-info">
-        <span id="displayDate">--</span>
-        <span id="ramadanNo">--</span>
+        <span id="displayDate">শুরু হচ্ছে...</span>
+        <span id="ramadanNo">১ম রমজান</span>
     </div>
 
     <h1>🌙 সময়সূচী</h1>
@@ -105,17 +105,17 @@
     <div class="time-row">
         <div class="time-card">
             <div class="time-label">সাহরীর শেষ</div>
-            <div class="time-value" id="sahriTime">--:--</div>
+            <div class="time-value" id="sahriTime">০৫:১১</div>
         </div>
         <div class="time-card">
             <div class="time-label">ইফতার</div>
-            <div class="time-value" id="iftarTime">--:--</div>
+            <div class="time-value" id="iftarTime">০৫:৫৯</div>
         </div>
     </div>
 
     <div class="countdown">
-        <div class="message" id="statusMsg">অপেক্ষা করুন...</div>
-        <div class="countdown-timer" id="timer">০০:০০:০০</div>
+        <div class="message" id="statusMsg">সাহরীর বাকি</div>
+        <div class="countdown-timer" id="timer">--:--:--</div>
     </div>
 
     <div class="logo-container">
@@ -129,165 +129,156 @@
 </div>
 
 <script>
-    // পটুয়াখালী ২০২৬ এর সময়সূচী
+    // এই কোডটি পরিবর্তন করবেন না - এটি সব মোবাইলে কাজ করার জন্য তৈরি
     const schedule = [
-        { date: "2026-02-19", sahri: "05:11", iftar: "05:59" },
-        { date: "2026-02-20", sahri: "05:10", iftar: "06:00" },
-        { date: "2026-02-21", sahri: "05:10", iftar: "06:00" },
-        { date: "2026-02-22", sahri: "05:09", iftar: "06:01" },
-        { date: "2026-02-23", sahri: "05:08", iftar: "06:01" },
-        { date: "2026-02-24", sahri: "05:08", iftar: "06:02" },
-        { date: "2026-02-25", sahri: "05:07", iftar: "06:02" },
-        { date: "2026-02-26", sahri: "05:06", iftar: "06:03" },
-        { date: "2026-02-27", sahri: "05:05", iftar: "06:03" },
-        { date: "2026-02-28", sahri: "05:05", iftar: "06:03" },
-        { date: "2026-03-01", sahri: "05:04", iftar: "06:04" },
-        { date: "2026-03-02", sahri: "05:03", iftar: "06:04" },
-        { date: "2026-03-03", sahri: "05:02", iftar: "06:05" },
-        { date: "2026-03-04", sahri: "05:01", iftar: "06:05" },
-        { date: "2026-03-05", sahri: "05:01", iftar: "06:05" },
-        { date: "2026-03-06", sahri: "05:00", iftar: "06:06" },
-        { date: "2026-03-07", sahri: "04:59", iftar: "06:06" },
-        { date: "2026-03-08", sahri: "04:58", iftar: "06:07" },
-        { date: "2026-03-09", sahri: "04:57", iftar: "06:07" },
-        { date: "2026-03-10", sahri: "04:56", iftar: "06:07" },
-        { date: "2026-03-11", sahri: "04:55", iftar: "06:08" },
-        { date: "2026-03-12", sahri: "04:55", iftar: "06:08" },
-        { date: "2026-03-13", sahri: "04:54", iftar: "06:08" },
-        { date: "2026-03-14", sahri: "04:53", iftar: "06:09" },
-        { date: "2026-03-15", sahri: "04:52", iftar: "06:09" },
-        { date: "2026-03-16", sahri: "04:51", iftar: "06:10" },
-        { date: "2026-03-17", sahri: "04:50", iftar: "06:10" },
-        { date: "2026-03-18", sahri: "04:49", iftar: "06:10" },
-        { date: "2026-03-19", sahri: "04:48", iftar: "06:11" },
-        { date: "2026-03-20", sahri: "04:47", iftar: "06:11" }
+        { d: "2026-02-19", s: "05:11", i: "05:59" },
+        { d: "2026-02-20", s: "05:10", i: "06:00" },
+        { d: "2026-02-21", s: "05:10", i: "06:00" },
+        { d: "2026-02-22", s: "05:09", i: "06:01" },
+        { d: "2026-02-23", s: "05:08", i: "06:01" },
+        { d: "2026-02-24", s: "05:08", i: "06:02" },
+        { d: "2026-02-25", s: "05:07", i: "06:02" },
+        { d: "2026-02-26", s: "05:06", i: "06:03" },
+        { d: "2026-02-27", s: "05:05", i: "06:03" },
+        { d: "2026-02-28", s: "05:05", i: "06:03" },
+        { d: "2026-03-01", s: "05:04", i: "06:04" },
+        { d: "2026-03-02", s: "05:03", i: "06:04" },
+        { d: "2026-03-03", s: "05:02", i: "06:05" },
+        { d: "2026-03-04", s: "05:01", i: "06:05" },
+        { d: "2026-03-05", s: "05:01", i: "06:05" },
+        { d: "2026-03-06", s: "05:00", i: "06:06" },
+        { d: "2026-03-07", s: "04:59", i: "06:06" },
+        { d: "2026-03-08", s: "04:58", i: "06:07" },
+        { d: "2026-03-09", s: "04:57", i: "06:07" },
+        { d: "2026-03-10", s: "04:56", i: "06:07" },
+        { d: "2026-03-11", s: "04:55", i: "06:08" },
+        { d: "2026-03-12", s: "04:55", i: "06:08" },
+        { d: "2026-03-13", s: "04:54", i: "06:08" },
+        { d: "2026-03-14", s: "04:53", i: "06:09" },
+        { d: "2026-03-15", s: "04:52", i: "06:09" },
+        { d: "2026-03-16", s: "04:51", i: "06:10" },
+        { d: "2026-03-17", s: "04:50", i: "06:10" },
+        { d: "2026-03-18", s: "04:49", i: "06:10" },
+        { d: "2026-03-19", s: "04:48", i: "06:11" },
+        { d: "2026-03-20", s: "04:47", i: "06:11" }
     ];
 
-    // বাংলা সংখ্যা কনভার্টার
-    function toBengaliNumerals(str) {
-        if (!str) return "";
-        const numbers = { '0': '০', '1': '১', '2': '২', '3': '৩', '4': '৪', '5': '৫', '6': '৬', '7': '৭', '8': '৮', '9': '৯' };
-        return str.toString().replace(/[0-9]/g, match => numbers[match]);
+    function toBanglaNum(n) {
+        return n.toString().replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
     }
 
-    // বাংলা মাসের নাম (ম্যানুয়াল)
-    function getBanglaDate(dateStr) {
-        const months = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
-        const d = new Date(dateStr);
-        const day = d.getDate();
-        const month = months[d.getMonth()];
-        return toBengaliNumerals(day) + " " + month;
+    function getFormattedDate(dateStr) {
+        const parts = dateStr.split('-');
+        const months = ["জানু", "ফেব্রু", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টে", "অক্টো", "নভে", "ডিসে"];
+        return toBanglaNum(parts[2]) + " " + months[parseInt(parts[1]) - 1] + ", " + "শনিবার_রবিবার_সোমবার_মঙ্গলবার_বুধবার_বৃহস্পতিবার_শুক্রবার".split('_')[new Date(dateStr).getDay() + 1];
     }
 
-    // টাইম ফরম্যাটার
-    function formatTime(timeStr) {
-        if (!timeStr) return "--:--";
-        return toBengaliNumerals(timeStr);
-    }
-
-    function updateDashboard() {
+    function updateTimer() {
         const now = new Date();
-        // লোকাল সময় অনুযায়ী আজকের তারিখ বের করা
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const todayStr = ${year}-${month}-${day};
-
-        // ১ম রমজান এবং ডাটা সেট করা
-        let targetIndex = 0; // ডিফল্টভাবে প্রথম দিন দেখাবে
-        const firstDate = schedule[0].date;
+        const nowStr = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, '0') + "-" + String(now.getDate()).padStart(2, '0');
         
-        // তারিখ যাচাই
-        if (todayStr < firstDate) {
-            // রমজান শুরুর আগে: ১ম দিনের তথ্য দেখাবে
-            targetIndex = 0;
-        } else {
-            // রমজানের মধ্যে বা পরে
-            const idx = schedule.findIndex(item => item.date === todayStr);
-            if (idx !== -1) {
-                // আজকের তারিখ পাওয়া গেছে
-                let [iftarH, iftarM] = schedule[idx].iftar.split(':');
-                let iftarHour = parseInt(iftarH) + 12;
-                const iftarTime = new Date(${todayStr}T${iftarHour}:${iftarM}:00);
+        // ডিফল্টভাবে ১ম দিন সেট করা
+        let activeIdx = 0;
+        let isBeforeRamadan = false;
 
-                // ইফতার শেষ হয়ে গেলে পরের দিনের তথ্য
-                if (now > iftarTime) {
-                    targetIndex = idx + 1;
-                } else {
-                    targetIndex = idx;
+        if (nowStr < schedule[0].d) {
+            // রমজান শুরু হয়নি
+            activeIdx = 0;
+            isBeforeRamadan = true;
+        } else {
+            // রমজানের মাঝখানে
+            for (let i = 0; i < schedule.length; i++) {
+                if (schedule[i].d === nowStr) {
+                    activeIdx = i;
+                    // ইফতার শেষ হয়ে গেলে পরের দিন দেখাও
+                    const [h, m] = schedule[i].i.split(':');
+                    const iftarDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(h) + 12, parseInt(m), 0);
+                    
+                    if (now > iftarDate) {
+                        activeIdx = i + 1; 
+                    }
+                    break;
                 }
-            } else {
-                // তারিখ লিস্টে নেই (হয়তো রমজান শেষ)
-                if (todayStr > schedule[schedule.length - 1].date) {
-                   targetIndex = schedule.length; // শেষ
-                } else {
-                   targetIndex = 0; // ফলব্যাক
-                }
+            }
+            // রমজান শেষ হলে
+            if (nowStr > schedule[schedule.length-1].d) {
+                activeIdx = schedule.length;
             }
         }
 
         // ডিসপ্লে আপডেট
-        if (targetIndex < schedule.length) {
-            const data = schedule[targetIndex];
+        if (activeIdx < schedule.length) {
+            const todayData = schedule[activeIdx];
             
-            // ১. তারিখ ও রমজান নম্বর
-            document.getElementById('displayDate').innerText = getBanglaDate(data.date);
-            document.getElementById('ramadanNo').innerText = toBengaliNumerals(targetIndex + 1) + " রমজান";
+            // টেক্সট আপডেট
+            document.getElementById('ramadanNo').innerText = toBanglaNum(activeIdx + 1) + " রমজান";
+            document.getElementById('displayDate').innerText = toBanglaNum(todayData.d.split('-')[2]) + " ফেব্রুয়ারি/মার্চ"; 
+            document.getElementById('sahriTime').innerText = toBanglaNum(todayData.s);
+            document.getElementById('iftarTime').innerText = toBanglaNum(todayData.i);
 
-            // ২. সাহরী ও ইফতারের সময়
-            document.getElementById('sahriTime').innerText = formatTime(data.sahri);
-            document.getElementById('iftarTime').innerText = formatTime(data.iftar);
+            // কাউন্টডাউন ক্যালকুলেশন
+            let targetDate;
+            let msgText;
 
-            // ৩. কাউন্টডাউন
-            const sahriTime = new Date(${data.date}T${data.sahri}:00);
-            let [iftarH, iftarM] = data.iftar.split(':');
-            let iftarHour = parseInt(iftarH) + 12;
-            const iftarTime = new Date(${data.date}T${iftarHour}:${iftarM}:00);
+            // সাহরী টার্গেট
+            const [sh, sm] = todayData.s.split(':');
+            const sahriObj = new Date(todayData.d + "T" + todayData.s + ":00"); // Standard ISO format works best
 
-            let diff = 0;
-            let msg = "";
+            // ইফতার টার্গেট
+            const [ih, im] = todayData.i.split(':');
+            const iftarObj = new Date(todayData.d + "T" + (parseInt(ih)+12) + ":" + im + ":00");
 
-            if (now < sahriTime) {
-                diff = sahriTime - now;
-                msg = "সাহরীর শেষ সময়ের বাকি";
-            } else if (now >= sahriTime && now < iftarTime) {
-                diff = iftarTime - now;
-                msg = "ইফতারের বাকি";
+            // ম্যানুয়াল ডেট ফিক্স (Safari/Old Phone Fix)
+            const y = parseInt(todayData.d.split('-')[0]);
+            const mo = parseInt(todayData.d.split('-')[1]) - 1;
+            const da = parseInt(todayData.d.split('-')[2]);
+            
+            const sTime = new Date(y, mo, da, parseInt(sh), parseInt(sm));
+            const iTime = new Date(y, mo, da, parseInt(ih)+12, parseInt(im));
+
+            if (now < sTime) {
+                targetDate = sTime;
+                msgText = "সাহরীর শেষ সময়ের বাকি";
+            } else if (now < iTime) {
+                targetDate = iTime;
+                msgText = "ইফতারের বাকি";
             } else {
-                msg = "পরবর্তী দিনের জন্য অপেক্ষা...";
-                diff = 0;
+                msgText = "পরবর্তী সাহরীর অপেক্ষা...";
+                targetDate = null;
             }
 
-            // টাইমার আপডেট
-            if (diff > 0) {
-                const h = Math.floor(diff / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
-                
-                const timeStr = ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')};
-                document.getElementById('timer').innerText = toBengaliNumerals(timeStr);
-                document.getElementById('statusMsg').innerText = msg;
+            document.getElementById('statusMsg').innerText = msgText;
+
+            if (targetDate) {
+                const diff = targetDate - now;
+                if(diff > 0) {
+                    const h = Math.floor(diff / 3600000);
+                    const m = Math.floor((diff % 3600000) / 60000);
+                    const s = Math.floor((diff % 60000) / 1000);
+                    document.getElementById('timer').innerText = toBanglaNum(
+                        String(h).padStart(2,'0') + ":" + String(m).padStart(2,'0') + ":" + String(s).padStart(2,'0')
+                    );
+                } else {
+                    document.getElementById('timer').innerText = "০০:০০:০০";
+                }
             } else {
-                document.getElementById('timer').innerText = toBengaliNumerals("০০:০০:০০");
-                document.getElementById('statusMsg').innerText = msg;
+                 document.getElementById('timer').innerText = "০০:০০:০০";
             }
 
         } else {
-            // রমজান শেষ
+            // ঈদ মোবারক স্ক্রিন
             document.getElementById('displayDate').innerText = "ঈদ মোবারক";
             document.getElementById('ramadanNo').innerText = "সমাপ্ত";
-            document.getElementById('statusMsg').innerText = "মাহে রমজান সমাপ্ত।";
             document.getElementById('sahriTime').innerText = "--";
             document.getElementById('iftarTime').innerText = "--";
+            document.getElementById('statusMsg').innerText = "পবিত্র মাহে রমজান সমাপ্ত";
             document.getElementById('timer').innerText = "";
         }
     }
 
-    // প্রতি ১ সেকেন্ড পরপর আপডেট
-    setInterval(updateDashboard, 1000);
-    // পেজ লোড হওয়ার সাথে সাথেই একবার রান হবে
-    updateDashboard();
-
+    // প্রতি ১ সেকেন্ড পরপর চলবে
+    setInterval(updateTimer, 1000);
+    updateTimer(); // লোড হওয়ার সাথে সাথে একবার রান হবে
 </script>
 
 </body>
