@@ -56,7 +56,7 @@
             padding: 15px 10px;
             border-radius: 12px;
             border: 1px solid #86efac;
-            width: 48%; /* অর্ধেক জায়গা নিবে */
+            width: 48%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -78,6 +78,7 @@
             color: white;
             padding: 15px;
             border-radius: 10px;
+            margin-bottom: 10px;
         }
         .message { font-size: 1rem; margin-bottom: 5px; opacity: 0.9; }
         .countdown-timer {
@@ -89,10 +90,13 @@
         /* লোগো সেকশন */
         .logo-container {
             margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .association-logo {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #16a34a;
@@ -135,7 +139,7 @@
     </div>
 
     <div class="logo-container">
-        <img src="logo.jpg" alt="Logo" class="association-logo" onerror="this.style.display='none'">
+        <img src="logo.jpg.png" alt="Logo" class="association-logo" onerror="alert('লোগো এখনও পাওয়া যাচ্ছে না। ফাইলের নাম চেক করুন।')">
         <div class="association-name">মির্জাগঞ্জ উপজেলা স্টুডেন্টস' অ্যাসোসিয়েশন, বরিশাল</div>
     </div>
     
@@ -207,19 +211,19 @@
 
         let targetIndex = -1;
         
-        // ১. চেক করা আজ কি রমজান শুরু হওয়ার আগের দিন? (লিস্টের প্রথম দিনের আগে)
+        // ১. আজ কি রমজান শুরুর আগে? (১৯ তারিখের আগে)
         const firstRamadanDate = schedule[0].date;
-        const firstRamadanSahri = new Date(${firstRamadanDate}T${schedule[0].sahri}:00);
+        const firstRamadanTime = new Date(${firstRamadanDate}T00:00:00);
 
-        if (now < firstRamadanSahri) {
-            // যদি এখনকার সময় ১ম সাহরীর চেয়ে কম হয়, তাহলে ১ম রমজানের ডাটা দেখাও
+        if (now < firstRamadanTime) {
+            // যদি আজ ১৮ তারিখ বা তার আগে হয়, তাহলে ১৯ তারিখ (১ম রমজান) দেখাবে
             targetIndex = 0;
         } else {
-            // ২. আজকের তারিখ লিস্টে খুঁজি
+            // ২. আজকের ডাটা বের করা
             const todayIndex = schedule.findIndex(item => item.date === todayStr);
             
             if (todayIndex !== -1) {
-                // আজকের ইফতারের সময় পার হয়ে গেছে কি না?
+                // আজকের ইফতার শেষ কি না?
                 let [iftarH, iftarM] = schedule[todayIndex].iftar.split(':');
                 let iftarHour = parseInt(iftarH) + 12; 
                 const todayIftarTime = new Date(${todayStr}T${iftarHour}:${iftarM}:00);
@@ -228,28 +232,26 @@
                     // ইফতার শেষ, তাহলে আগামীকালের ডাটা দেখাও (যদি থাকে)
                     targetIndex = todayIndex + 1;
                 } else {
-                    // এখনো ইফতার হয়নি, আজকের ডাটায় দেখাও
+                    // এখনো ইফতার বাকি, আজকের ডাটাই দেখাও
                     targetIndex = todayIndex;
                 }
             } else {
-                // লিস্টে আজকের তারিখ নেই (হয়তো রমজান শেষ)
                 targetIndex = -1;
             }
         }
 
-        // ডাটা ডিসপ্লে করা
         if (targetIndex !== -1 && targetIndex < schedule.length) {
             const data = schedule[targetIndex];
             
-            // হেডার আপডেট (তারিখ ও রমজান নম্বর)
+            // হেডার
             document.getElementById('displayDate').innerText = formatDateBangla(data.date);
             document.getElementById('ramadanNo').innerText = toBengaliNumerals(targetIndex + 1) + " রমজান";
 
-            // সময় আপডেট
+            // সময়
             document.getElementById('sahriTime').innerText = formatTimeDisplay(data.sahri);
             document.getElementById('iftarTime').innerText = formatTimeDisplay(data.iftar);
             
-            // কাউন্টডাউন লজিক
+            // কাউন্টডাউন
             const sahriTime = new Date(${data.date}T${data.sahri}:00);
             let [iftarH, iftarM] = data.iftar.split(':');
             let iftarHour = parseInt(iftarH) + 12; 
@@ -265,7 +267,6 @@
                 diff = iftarTime - now;
                 msg = "ইফতারের বাকি";
             } else {
-                // এই ব্লকে সাধারণত আসবে না কারণ আমরা উপরেই চেক করেছি ইফতার শেষ হলে পরের দিন দেখাতে
                 msg = "আজকের ইফতার সম্পন্ন।";
                 diff = 0;
             }
@@ -273,6 +274,7 @@
             showCountdown(diff, msg);
 
         } else {
+            // রমজান শেষ হলে
             document.getElementById('displayDate').innerText = "সমাপ্ত";
             document.getElementById('ramadanNo').innerText = "";
             document.getElementById('statusMsg').innerText = "পবিত্র মাহে রমজান সমাপ্ত। ঈদ মোবারক!";
