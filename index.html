@@ -7,22 +7,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Hind Siliguri', sans-serif; background-color: #f0fdf4; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 450px; width: 100%; border: 2px solid #16a34a; box-sizing: border-box; }
-        .district-selector { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 5px; color: #166534; font-weight: 600; }
-        select { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #86efac; font-family: 'Hind Siliguri'; font-size: 1.1rem; color: #15803d; outline: none; }
+        
+        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 450px; width: 100%; border: 2px solid #16a34a; box-sizing: border-box; text-align: center; }
+        
+        .district-selector { margin-bottom: 20px; text-align: left; width: 100%; }
+        label { display: block; margin-bottom: 8px; color: #166534; font-weight: 600; font-size: 1.1rem; }
+        select { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #86efac; font-family: 'Hind Siliguri'; font-size: 1.1rem; color: #15803d; outline: none; background: #fff; }
+        
         .header-info { display: flex; justify-content: space-between; background: #dcfce7; padding: 12px; border-radius: 10px; margin-bottom: 20px; color: #166534; font-weight: 700; font-size: 1.1rem; }
-        h1 { color: #16a34a; margin: 0 0 20px 0; font-size: 1.7rem; font-weight: 700; }
+        
+        h1 { color: #16a34a; margin: 0 0 20px 0; font-size: 1.8rem; font-weight: 700; text-align: center; }
+        
         .time-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
         .time-card { background: #f0fdf4; padding: 15px 5px; border-radius: 12px; border: 1px solid #86efac; width: 48%; display: flex; flex-direction: column; align-items: center; }
         .time-label { font-size: 1.1rem; color: #555; margin-bottom: 5px; }
         .time-value { font-size: 2rem; font-weight: 700; color: #15803d; }
-        .countdown { background: #166534; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
-        .message { font-size: 1.1rem; margin-bottom: 8px; opacity: 0.9; }
-        .countdown-timer { font-size: 2.6rem; font-weight: 700; font-family: monospace; }
-        .logo-container { margin-top: 10px; display: flex; flex-direction: column; align-items: center; }
-        .association-logo { width: 90px; height: 90px; border-radius: 50%; border: 2px solid #16a34a; margin-bottom: 10px; }
-        .association-name { font-size: 1.2rem; color: #166534; font-weight: 700; line-height: 1.4; }
+        
+        .countdown { background: #166534; color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; }
+        .message { font-size: 1.1rem; margin-bottom: 10px; opacity: 0.9; }
+        .countdown-timer { font-size: 2.8rem; font-weight: 700; font-family: monospace; letter-spacing: 2px; }
+        
+        /* লোগো ও সংগঠনের নামের ফিক্সড ডিজাইন */
+        .logo-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-top: 10px; }
+        .association-logo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid #16a34a; margin-bottom: 15px; object-fit: cover; }
+        .association-name { font-size: 1.25rem; color: #166534; font-weight: 700; line-height: 1.4; text-align: center; width: 100%; word-wrap: break-word; }
+
+        footer { margin-top: 20px; font-size: 0.85rem; color: #666; text-align: center; }
     </style>
 </head>
 <body>
@@ -34,7 +44,7 @@
     </div>
 
     <div class="header-info">
-        <span id="displayDate">--</span>
+        <span id="displayDate">লোডিং...</span>
         <span id="ramadanNo">-- রমজান</span>
     </div>
 
@@ -60,9 +70,12 @@
         <img src="logo.jpg.png" alt="Logo" class="association-logo">
         <div class="association-name">মির্জাগঞ্জ উপজেলা স্টুডেন্টস অ্যাসোসিয়েশন, বরিশাল</div>
     </div>
+    
+    <footer>সোর্স: ইসলামিক ফাউন্ডেশন</footer>
 </div>
 
 <script>
+    // ঢাকা ভিত্তিক মূল সময়সূচী ২০২৬
     const baseSchedule = [
         { d: "2026-02-19", s: "05:07", i: "05:56" }, { d: "2026-02-20", s: "05:06", i: "05:57" },
         { d: "2026-02-21", s: "05:05", i: "05:57" }, { d: "2026-02-22", s: "05:04", i: "05:58" },
@@ -131,7 +144,11 @@
 
     function update() {
         const now = new Date();
-        const todayStr = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,'0') + "-" + String(now.getDate()).padStart(2,'0');
+        const year = now.getFullYear();
+        const month = String(now.getMonth()+1).padStart(2,'0');
+        const day = String(now.getDate()).padStart(2,'0');
+        const todayStr = ${year}-${month}-${day};
+        
         const dist = districtData.find(d => d.n === currentDist);
         
         let idx = baseSchedule.findIndex(item => item.d === todayStr);
@@ -154,7 +171,7 @@
             const iFull = new Date(now.getFullYear(), now.getMonth(), now.getDate(), ih+12, im);
 
             let target = now < sFull ? sFull : (now < iFull ? iFull : null);
-            document.getElementById('statusMsg').innerText = now < sFull ? "সাহরীর শেষ সময়ের বাকি" : (now < iFull ? "イফতারের বাকি" : "পরবর্তী সময়ের অপেক্ষা...");
+            document.getElementById('statusMsg').innerText = now < sFull ? "সাহরীর শেষ সময়ের বাকি" : (now < iFull ? "ইফতারের বাকি" : "পরবর্তী সময়ের অপেক্ষা...");
 
             if (target) {
                 const diff = target - now;
