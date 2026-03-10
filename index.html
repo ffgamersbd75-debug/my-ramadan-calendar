@@ -65,6 +65,7 @@
 </div>
 
 <script>
+    // পুরো ৩০ রোজার ডাটাবেজ যোগ করা হলো
     var ramadanSchedule = [
         { d: "2026-02-19", s: "05:07", i: "17:56" }, { d: "2026-02-20", s: "05:06", i: "17:57" },
         { d: "2026-02-21", s: "05:05", i: "17:57" }, { d: "2026-02-22", s: "05:04", i: "17:58" },
@@ -75,7 +76,12 @@
         { d: "2026-03-03", s: "04:56", i: "18:02" }, { d: "2026-03-04", s: "04:55", i: "18:03" },
         { d: "2026-03-05", s: "04:54", i: "18:03" }, { d: "2026-03-06", s: "04:53", i: "18:04" },
         { d: "2026-03-07", s: "04:52", i: "18:04" }, { d: "2026-03-08", s: "04:51", i: "18:05" },
-        { d: "2026-03-09", s: "04:50", i: "18:05" }, { d: "2026-03-10", s: "04:49", i: "18:06" }
+        { d: "2026-03-09", s: "04:50", i: "18:05" }, { d: "2026-03-10", s: "04:49", i: "18:06" },
+        { d: "2026-03-11", s: "04:48", i: "18:06" }, { d: "2026-03-12", s: "04:47", i: "18:07" },
+        { d: "2026-03-13", s: "04:46", i: "18:07" }, { d: "2026-03-14", s: "04:45", i: "18:08" },
+        { d: "2026-03-15", s: "04:44", i: "18:08" }, { d: "2026-03-16", s: "04:43", i: "18:09" },
+        { d: "2026-03-17", s: "04:42", i: "18:09" }, { d: "2026-03-18", s: "04:41", i: "18:10" },
+        { d: "2026-03-19", s: "04:40", i: "18:10" }, { d: "2026-03-20", s: "04:39", i: "18:11" }
     ];
 
     var districtData = [
@@ -165,12 +171,26 @@
             if(ramadanSchedule[j].d === todayStr) { idx = j; break; }
         }
 
+        // বর্তমান সেকেন্ড হিসাব
+        var currentSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+        var activeIdx = idx;
+        var diff = 0;
+        var msg = "";
+
         if (idx === -1) {
-            if (todayStr < ramadanSchedule[0].d) { idx = 0; }
-            else { 
+            if (todayStr < ramadanSchedule[0].d) {
+                document.getElementById('ramadanNo').innerText = "অপেক্ষমান";
+                document.getElementById('statusMsg').innerText = "রমজান শুরু হতে বাকি...";
+                document.getElementById('timer').innerText = toBangla("০০:০০:০০");
+                return;
+            } else { 
                 document.getElementById('ramadanNo').innerText = "ঈদ মোবারক";
-                document.getElementById('statusMsg').innerText = "রমজান সমাপ্ত।";
-                document.getElementById('timer').innerText = "০০:০০:০০";
+                document.getElementById('displayDate').innerText = "--";
+                document.getElementById('districtTitle').innerText = "🌙 " + currentDist + " জেলা";
+                document.getElementById('sahriTime').innerText = "--:--";
+                document.getElementById('iftarTime').innerText = "--:--";
+                document.getElementById('statusMsg').innerText = "মাহে রমজান সমাপ্ত।";
+                document.getElementById('timer').innerText = toBangla("০০:০০:০০");
                 return;
             }
         }
@@ -179,59 +199,60 @@
         var sahriStr = addMins(data.s, dist.s);
         var iftarStr = addMins(data.i, dist.i);
 
-        var currentSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+        var sParts = sahriStr.split(':');
+        var sahriSec = (parseInt(sParts[0], 10) * 3600) + (parseInt(sParts[1], 10) * 60);
         var iParts = iftarStr.split(':');
         var iftarSec = (parseInt(iParts[0], 10) * 3600) + (parseInt(iParts[1], 10) * 60);
 
-        // ইফতারের সময় পার হয়ে গেলে পরবর্তী দিনের ডাটা দেখানোর লজিক
-        var activeIdx = idx;
-        var isNextDay = false;
-        
-        if (currentSec >= iftarSec) {
+        // লজিক পার্ট: সময় অনুযায়ী দিন পরিবর্তন
+        if (currentSec < sahriSec) {
+            activeIdx = idx;
+            diff = sahriSec - currentSec; 
+            msg = "সাহরীর শেষ সময়ের বাকি";
+        } else if (currentSec < iftarSec) {
+            activeIdx = idx;
+            diff = iftarSec - currentSec; 
+            msg = "ইফতারের বাকি";
+        } else {
+            // ইফতার পার হয়ে গেলে পরের দিনের সাহরীর সময় ধরবে
             if (idx + 1 < ramadanSchedule.length) {
                 activeIdx = idx + 1;
-                isNextDay = true;
+                var nextData = ramadanSchedule[activeIdx];
+                var nextSahriStr = addMins(nextData.s, dist.s);
+                var nsParts = nextSahriStr.split(':');
+                var nextSahriSec = (parseInt(nsParts[0], 10) * 3600) + (parseInt(nsParts[1], 10) * 60);
+                diff = (86400 - currentSec) + nextSahriSec;
+                msg = "পরবর্তী সাহরীর বাকি"; 
+            } else { 
+                // ৩০ রোজার ইফতার শেষ হলে
+                document.getElementById('ramadanNo').innerText = "ঈদ মোবারক";
+                document.getElementById('statusMsg').innerText = "মাহে রমজান সমাপ্ত।";
+                document.getElementById('timer').innerText = toBangla("০০:০০:০০");
+                return;
             }
         }
 
-        // ডিসপ্লেতে দেখানোর জন্য অ্যাকটিভ ডাটা (আজকের অথবা আগামীকালের)
+        // ডিসপ্লে আপডেট (যা পরের দিনের জন্য স্বয়ংক্রিয়ভাবে পরিবর্তিত হবে)
         var displayData = ramadanSchedule[activeIdx];
-        var displaySahriStr = addMins(displayData.s, dist.s);
-        var displayIftarStr = addMins(displayData.i, dist.i);
+        var dSahriStr = addMins(displayData.s, dist.s);
+        var dIftarStr = addMins(displayData.i, dist.i);
 
         var dateParts = displayData.d.split('-');
         var monthName = displayData.d.indexOf("-02-") !== -1 ? " ফেব্রুয়ারি" : " মার্চ";
+        
         document.getElementById('displayDate').innerText = toBangla(dateParts[2]) + monthName;
         document.getElementById('ramadanNo').innerText = toBangla(activeIdx + 1) + " রমজান";
         document.getElementById('districtTitle').innerText = "🌙 " + currentDist + " জেলা";
-        document.getElementById('sahriTime').innerText = toBangla(displaySahriStr);
+        document.getElementById('sahriTime').innerText = toBangla(dSahriStr);
         
-        var dIftarParts = displayIftarStr.split(':');
+        var dIftarParts = dIftarStr.split(':');
         var ih = parseInt(dIftarParts[0], 10);
         var im = parseInt(dIftarParts[1], 10);
         var displayIh = ih > 12 ? ih - 12 : ih;
         document.getElementById('iftarTime').innerText = toBangla(displayIh + ":" + padZero(im));
 
-        // টাইমার ক্যালকুলেশন
-        var sParts = displaySahriStr.split(':');
-        var sahriSec = (parseInt(sParts[0], 10) * 3600) + (parseInt(sParts[1], 10) * 60);
-        var diff = 0;
-        var msg = "";
-
-        if (!isNextDay) {
-            if (currentSec < sahriSec) {
-                diff = sahriSec - currentSec; 
-                msg = "সাহরীর শেষ সময়ের বাকি";
-            } else {
-                diff = iftarSec - currentSec; 
-                msg = "ইফতারের বাকি";
-            }
-        } else {
-            diff = (86400 - currentSec) + sahriSec;
-            msg = "পরবর্তী সাহরীর বাকি";
-        }
-
         document.getElementById('statusMsg').innerText = msg;
+        
         if (diff > 0) {
             var hr = Math.floor(diff / 3600);
             var mn = Math.floor((diff % 3600) / 60);
